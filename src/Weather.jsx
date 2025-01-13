@@ -1,30 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function Weather() {
-  // const fetchWeatherData = async () => {
-  //   try {
-  //     const weatherData = await fetch(
-  //       "https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={process.env,"
-  //     );
-  //     const weatherData1 = await weatherData.json();
+  const [city, setCity] = useState("Kathmandu");
+  const [weatherData, setWeatherData] = useState(null);
 
-  //     console.log(weatherData1);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  try {
-    console.log(import.meta.env.VITE_APP_WEATHER_API_KEY)
-  } catch (error) {
-    console.log(error);
-  }
+  const fetchWeatherData = async () => {
+    try {
+      const weatherData = await fetch(
+        "http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=be608e6f8600cb747f0a56d16dfc2d21"
+        // be608e6f8600cb747f0a56d16dfc2d21
+      );//import.meta.env.VITE_APP_WEATHER_API_KEY
+      const weatherData1 = await weatherData.json();
+      setWeatherData(weatherData1)
+      console.log(weatherData1);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(()=>{
+    fetchWeatherData();
+  },[]);
+
+  const handelUserInput = (e) => {
+    e.preventDefault();
+    // console.log(e.target.value);
+    setCity(e.target.value);
+  };
+  //Handel when submit button is Clicked 
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    fetchWeatherData();
+  };
   
+
   return (
     <div>
       <div id="header">
         <h1>Weather App</h1>
-        <input type="text" placeholder="Enter City Name......" />
-        <input type="submit" value="Search" />
+        <form onSubmit={handelSubmit}>
+          <input
+            type="text"
+            value={city}
+            placeholder="Enter city here...."
+            onChange={handelUserInput}
+          />
+          <input type="submit" value="submit" />
+        </form>
       </div>
     </div>
   );
