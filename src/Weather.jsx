@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
+import "./component/weather.css";
+import Clear_icon from "./component/images/clear.png";
+import Cloud_icon from "./component/images/cloud.png";
+import drizzle_icon from "./component/images/drizzle.png";
+import humidity_icon from "./component/images/humidity.png";
+import rain_icon from "./component/images/rain.png";
+import Snow_icon from "./component/images/snow.png";
 
 function Weather() {
   const [city, setCity] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-// import.meta.env.VITE_APP_WEATHER_API_KEY
-  const API_KEY =import.meta.env.VITE_APP_WEATHER_API_KEY  ;
+
+  // import.meta.env.VITE_APP_WEATHER_API_KEY
+  const API_KEY = import.meta.env.VITE_APP_WEATHER_API_KEY;
   const API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
   const fetchWeatherData = async () => {
@@ -52,54 +60,44 @@ function Weather() {
   };
 
   return (
-    <div>
-      <div
-        id="header"
-        style={{
-          fontFamily: "Arial, sans-serif",
-          textAlign: "center",
-          margin: "20px",
-        }}
-      >
+    <>
+      <div id="header">
         <h1>Weather App</h1>
+        <div id="search-bar">
         <form onSubmit={handelSubmit}>
           <input
             type="text"
             value={city}
             placeholder="Enter city here...."
             onChange={handelUserInput}
-            style={{
-              padding: "10px",
-              width: "300px",
-              fontSize: "16px",
-            }}
           />
-          <button
-            type="submit"
-            style={{
-              padding: "10px 20px",
-              marginLeft: "10px",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            Search
-          </button>
+          <button type="submit">Search</button>
         </form>
+        </div>
+        
+
         {loading && <p>Loading...</p>}
 
         {error && <p style={{ color: "red" }}>{error}</p>}
         {weatherData && (
           <div style={{ marginTop: "20px" }}>
             <h2>{weatherData.name}</h2>
-            <p><strong>Temperature:</strong> {weatherData.main.temp}°C</p>
-            <p><strong>Weather:</strong> {weatherData.weather[0].description}</p>
-            <p><strong>Humidity:</strong> {weatherData.main.humidity}%</p>
-            <p><strong>Wind Speed:</strong> {weatherData.wind.speed} m/s</p>
+            <p class="temperature">
+              <strong>Temperature:</strong> {weatherData.main.temp}°C
+            </p>
+            <p class="weather">
+              <strong>Weather:</strong> {weatherData.weather[0].description}
+            </p>
+            <p class="humidity">
+              <strong>Humidity:</strong> {weatherData.main.humidity}%
+            </p>
+            <p class="wind-speed">
+              <strong>Wind Speed:</strong> {weatherData.wind.speed} m/s
+            </p>
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }
 export default Weather;
