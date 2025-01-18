@@ -90,7 +90,7 @@ function Weather() {
             </p>
             <div id = "row">
             <p class="humidity">
-              <strong>Humidity:</strong> {weatherData.main.humidity}%
+              <strong>Humidity:,</strong> {weatherData.main.humidity}%
             </p>
             <p class="wind-speed">
               <strong>Wind Speed:</strong> {weatherData.wind.speed} m/s
