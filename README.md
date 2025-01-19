@@ -1,8 +1,3 @@
-# React + Vite
+This project is a Weather App with search option created using React in where one is able to search the weather of any city globally. This calls data from the OpenWeather API that gives an updated weather report and prints basic weather details including temperature (in Celsius), meteorological condition, humidity, wind speed and the type of weather icon respective of the condition which could be clear sky, rain, snow etc. There is also a textinput for entering the city, a button for resetting the data and a loading/bar error state screen for the app. Moreover, the result is the possibility of header height resizing depends on whether the weather data is loaded or not.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The city, weather data, loading state and errors are all created by useState hook and data is fetched when the user submits the city name using useEffect. The icons relating to the weather is information acquired from the API is implemented to the page to ensure that the user is presented with an icon that best represents the prevalent weather. The project shows main concepts of React like state, conditional rendering, and API integration that makes this tool an interactive application for users, to check the weather of any city.
