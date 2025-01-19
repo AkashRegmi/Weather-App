@@ -6,6 +6,8 @@ import drizzle_icon from "./component/images/drizzle.png";
 import humidity_icon from "./component/images/humidity.png";
 import rain_icon from "./component/images/rain.png";
 import Snow_icon from "./component/images/snow.png";
+import Image_icon from "./component/images/images.png";
+import Wind from "./component/images/Wind.png";
 
 function Weather() {
   const [city, setCity] = useState("");
@@ -62,19 +64,18 @@ function Weather() {
   return (
     <>
       <div id="header">
-        <h1>Weather App</h1>
+        <h1 class="heading">Weather App</h1>
         <div id="search-bar">
-        <form onSubmit={handelSubmit}>
-          <input
-            type="text"
-            value={city}
-            placeholder="Enter city here...."
-            onChange={handelUserInput}
-          />
-          <button type="submit">Search</button>
-        </form>
+          <form onSubmit={handelSubmit}>
+            <input
+              type="text"
+              value={city}
+              placeholder="Enter city here...."
+              onChange={handelUserInput}
+            />
+            <button type="submit">Search</button>
+          </form>
         </div>
-        
 
         {loading && <p>Loading...</p>}
 
@@ -88,15 +89,25 @@ function Weather() {
             <p class="weather">
               <strong>Weather:</strong> {weatherData.weather[0].description}
             </p>
-            <div id = "row">
-            <p class="humidity">
-              <strong>Humidity:,</strong> {weatherData.main.humidity}%
-            </p>
-            <p class="wind-speed">
-              <strong>Wind Speed:</strong> {weatherData.wind.speed} m/s
-            </p>
+
+            <div id="Humidity_WindSpeed">
+              <div class="col">
+                <img src={humidity_icon} alt="humidity logo" />
+                <div>
+                  <p class="humidity">{weatherData.main.humidity}%</p>
+                  <span>Humidity</span>
+                </div>
+              </div>
+
+              <div class="col">
+                <img src={Wind} alt="Wind logo" />
+                <div>
+                  <p class="wind-speed">{weatherData.wind.speed} m/s</p>
+                  <span>Wind Speed</span>
+                </div>
+              </div>
+
             </div>
-            
           </div>
         )}
       </div>
