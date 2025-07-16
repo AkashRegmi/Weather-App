@@ -4,7 +4,7 @@ The city, weather data, loading state and errors are all created by useState hoo
 
 
 To run the Project 
-1) first clone it from my Hithub.
+1) first clone it from my Github.
 2) Go to the folder Directory by doing cd WEATHER APP in terminal.
 3) Agaim, in terminal type  npm run dev 
 

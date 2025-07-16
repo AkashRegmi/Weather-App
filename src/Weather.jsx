@@ -1,12 +1,12 @@
+
 import React, { useEffect, useState } from "react";
-import "./component/weather.css";
+import "./component/weather1.css";
 import Clear_icon from "./component/images/clear.png";
 import Cloud_icon from "./component/images/cloud.png";
 import drizzle_icon from "./component/images/drizzle.png";
 import humidity_icon from "./component/images/humidity.png";
 import rain_icon from "./component/images/rain.png";
 import Snow_icon from "./component/images/snow.png";
-import Image_icon from "./component/images/images.png";
 import Wind from "./component/images/Wind.png";
 
 function Weather() {
@@ -15,11 +15,9 @@ function Weather() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // import.meta.env.VITE_APP_WEATHER_API_KEY
   const API_KEY = import.meta.env.VITE_APP_WEATHER_API_KEY;
   const API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
-  //code aanusar icon fix.
   const weatherIcons = {
     "01d": Clear_icon,
     "01n": Clear_icon,
@@ -37,9 +35,7 @@ function Weather() {
     "13n": Snow_icon,
   };
 
-  //fetching the data from openWeather API
   const fetchWeatherData = async () => {
-   
     if (!city) {
       setError("Please enter a city name.");
       return;
@@ -49,134 +45,143 @@ function Weather() {
     setError("");
     setWeatherData(null);
     try {
-      const weatherData = await fetch(
+      const response = await fetch(
         `${API_URL}?q=${city}&appid=${API_KEY}&units=metric`
       ); 
-      if (!weatherData.ok) {
-       
-        throw new Error("Country/City not found. Please try again !");
+      if (!response.ok) {
+        throw new Error("City not found. Please try again!");
       }
-      const weatherData1 = await weatherData.json();
-      console.log(weatherData1);
-      const icon = weatherIcons[weatherData1.weather[0].icon] || Clear_icon;
-      console.log(icon);
-
-      setWeatherData(weatherData1);
+      const data = await response.json();
+      setWeatherData(data);
     } catch (err) {
-      console.log(err);
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    fetchWeatherData();
+  
   }, []);
 
-  //User le input greko handel Greko
-  const handelUserInput = (e) => {
-    e.preventDefault();
-    // console.log(e.target.value);
+  const handleUserInput = (e) => {
     setCity(e.target.value);
   };
 
-  //Handel when submit button is Clicked
-  const handelSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     fetchWeatherData();
   };
 
-  //reset all the thing
   const handleReset = () => {
     setCity("");
     setWeatherData(null);
     setError("");
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSubmit(e);
+    }
+  };
+
   return (
-    <>
-      <div
-        id="header"
-        style={{
-          height: weatherData ? "auto" : "200px", // Dynamic height based on weatherData
-          transition: "height 0.3s ease", // Smooth height transition
-        }}
-      >
-        <h1 className="heading">Weather App</h1>
-        <div id="search-bar">
-          <form onSubmit={handelSubmit}>
+    <div className="weather-app">
+      <div className={`weather-container ${weatherData ? "expanded" : ""}`}>
+        <h1 className="app-title">Weather Forecast</h1>
+        
+        <div className="search-container">
+          <form onSubmit={handleSubmit} className="search-form">
             <input
               type="text"
               value={city}
-              placeholder="Enter city here...."
-              onChange={handelUserInput}
+              placeholder="Enter city name..."
+              onChange={handleUserInput}
+              onKeyPress={handleKeyPress}
+              className="search-input"
             />
-            <button type="submit">Search</button>
-            <button type="button" onClick={handleReset}>
-              Reset
-            </button>
+            <div className="button-group">
+              <button type="submit" className="search-button">
+                Search
+              </button>
+              <button 
+                type="button" 
+                onClick={handleReset}
+                className="reset-button"
+              >
+                Reset
+              </button>
+            </div>
           </form>
-          {weatherData && (
-            <img
-              src={weatherIcons[weatherData.weather[0].icon] || Clear_icon}
-              alt="Weather Logo"
-              className="logo"
-            />
-          )}
         </div>
 
         {loading && (
-          <p
-            style={{
-              color: "white",
-              fontSize: "20px",
-              fontWeight: "bold",
-              margin: "10px",
-            }}
-          >
-            Loading.......
-          </p>
+          <div className="loading-indicator">
+            <div className="spinner"></div>
+            <p>Loading weather data...</p>
+          </div>
         )}
 
         {error && (
-          <p
-            style={{
-              color: "red",
-              fontSize: "20px",
-              fontWeight: "bold",
-              margin: "10px",
-            }}
-          >
-            {error}
-          </p>
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
         )}
+
         {weatherData && (
-          <div style={{ marginTop: "0px" }}>
-            <p className="temperature">{weatherData.main.temp}°C</p>
-            <h2 className="PlaceName">{weatherData.name}</h2>
-            <p className="weather">{weatherData.weather[0].description}</p>
+          <div className="weather-display">
+            <div className="weather-header">
+              <h2 className="city-name">{weatherData.name}, {weatherData.sys?.country}</h2>
+              <p className="weather-description">
+                {weatherData.weather[0].description}
+              </p>
+            </div>
 
-            <div id="Humidity_WindSpeed">
-              <div className="col">
-                <img src={humidity_icon} alt="humidity logo" />
-                <div>
-                  <p className="humidity">{weatherData.main.humidity}%</p>
-                  <span>Humidity</span>
-                </div>
+            <div className="weather-main">
+              <div className="temperature-container">
+                <img 
+                  src={weatherIcons[weatherData.weather[0].icon] || Clear_icon} 
+                  alt="Weather icon" 
+                  className="weather-icon"
+                />
+                <p className="temperature">
+                  {Math.round(weatherData.main.temp)}°C
+                </p>
               </div>
+              
+              <div className="weather-details">
+                <div className="detail-item">
+                  <img src={humidity_icon} alt="Humidity" className="detail-icon" />
+                  <div className="detail-text">
+                    <span className="detail-value">{weatherData.main.humidity}%</span>
+                    <span className="detail-label">Humidity</span>
+                  </div>
+                </div>
 
-              <div className="col">
-                <img src={Wind} alt="Wind logo" />
-                <div>
-                  <p className="wind-speed">{weatherData.wind.speed} m/s</p>
-                  <span>Wind Speed</span>
+                <div className="detail-item">
+                  <img src={Wind} alt="Wind speed" className="detail-icon" />
+                  <div className="detail-text">
+                    <span className="detail-value">{weatherData.wind.speed} m/s</span>
+                    <span className="detail-label">Wind Speed</span>
+                  </div>
+                </div>
+
+                <div className="detail-item">
+                  <span className="detail-label">Feels Like:</span>
+                  <span className="detail-value">{Math.round(weatherData.main.feels_like)}°C</span>
+                </div>
+
+                <div className="detail-item">
+                  <span className="detail-label">Pressure:</span>
+                  <span className="detail-value">{weatherData.main.pressure} hPa</span>
                 </div>
               </div>
             </div>
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
+
 export default Weather;
